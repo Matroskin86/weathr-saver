@@ -3,10 +3,9 @@ name: Build Weather Screen Saver
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
     branches: [main]
-  release:
-    types: [created]
 
 jobs:
   build:
@@ -47,23 +46,17 @@ jobs:
         run: zip -r Weather.saver.zip Weather.saver
         working-directory: macos-screensaver/build-output
 
+      - name: Upload to Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: macos-screensaver/build-output/Weather.saver.zip
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: WeatherSaver
           path: macos-screensaver/build-output/Weather.saver.zip
-
-  release:
-    needs: build
-    runs-on: macos-26
-    if: startsWith(github.ref, 'refs/tags/v')
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: WeatherSaver
-
-      - uses: softprops/action-gh-release@v1
-        with:
-          files: Weather.saver.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
