@@ -3,9 +3,8 @@ options:
   bundleIdPrefix: com.weathr
   deploymentTarget:
     macOS: "13.0"
-  xcodeVersion: "15.0"
   generateEmptyDirectories: true
-  projectFormat: Xcode 14.0
+  projectFormat: xcode14_0
 
 settings:
   base:
