@@ -37,19 +37,25 @@ jobs:
             OTHER_LDFLAGS="-L${{ github.workspace }}/weathr-core/target/release -lweathr"
         working-directory: macos-screensaver
 
+      - name: Copy build output
+        run: |
+          cp -r ~/Library/Developer/Xcode/DerivedData/WeatherSaver-*/Build/Products/Release/Weather.saver ./build-output/
+          mkdir -p build-output/Weather.saver/Contents/MacOS
+        working-directory: macos-screensaver
+
       - name: Create zip
         run: zip -r Weather.saver.zip Weather.saver
-        working-directory: macos-screensaver/build/Release/WeatherSaver.build/Products/Release
+        working-directory: macos-screensaver/build-output
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: WeatherSaver
-          path: macos-screensaver/build/Release/WeatherSaver.build/Products/Release/Weather.saver.zip
+          path: macos-screensaver/build-output/Weather.saver.zip
 
   release:
     needs: build
-    runs-on: macos-13
+    runs-on: macos-26
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/download-artifact@v4
