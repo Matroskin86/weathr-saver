@@ -26,7 +26,10 @@ jobs:
         working-directory: weathr-core
 
       - name: Generate Xcode
-        run: xcodegen generate
+        run: |
+          xcodegen generate
+          # Fix project format for Xcode 15.4 compatibility
+          sed -i '' 's/objectVersion = 77;/objectVersion = 56;/g' WeatherSaver.xcodeproj/project.pbxproj
         working-directory: macos-screensaver
 
       - name: Build and Install ScreenSaver
