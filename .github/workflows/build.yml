@@ -38,13 +38,24 @@ jobs:
             LIBRARY_SEARCH_PATHS="${{ github.workspace }}/weathr-core/target/release" \
             OTHER_LDFLAGS="-L${{ github.workspace }}/weathr-core/target/release -lweathr" \
             CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO
+          echo "=== Build output ==="
+          ls -la build/root/ 2>/dev/null || echo "No build/root"
+          ls -la ~/Library/Developer/Xcode/DerivedData/ 2>/dev/null | head -10
         working-directory: macos-screensaver
 
       - name: Find .saver path
         id: finder
         run: |
-          SAVOR_PATH=$(find build/root -name "*.saver" -type d | head -1)
-          echo "path=$SAVOR_PATH" >> $GITHUB_OUTPUT
+          find build -name "*.saver" -type d 2>/dev/null || echo "No .saver found in build"
+          SAVOR_PATH=$(find build -name "*.saver" -type d 2>/dev/null | head -1)
+          echo "Found: $SAVOR_PATH"
+          if [ -n "$SAVOR_PATH" ]; then
+            echo "path=$SAVOR_PATH" >> $GITHUB_OUTPUT
+          else
+            # Try alternative location
+            SAVOR_PATH=$(find . -name "*.saver" -type d 2>/dev/null | head -1)
+            echo "path=$SAVOR_PATH" >> $GITHUB_OUTPUT
+          fi
 
       - name: Package zip
         run: |
