@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-26
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
 
@@ -29,40 +29,30 @@ jobs:
         run: xcodegen generate
         working-directory: macos-screensaver
 
-      - name: Build ScreenSaver
+      - name: Build and Install ScreenSaver
         run: |
-          xcodebuild -project WeatherSaver.xcodeproj -scheme WeatherSaver -configuration Release build \
+          xcodebuild -project WeatherSaver.xcodeproj -scheme WeatherSaver -configuration Release install DSTROOT=build/root \
             LIBRARY_SEARCH_PATHS="${{ github.workspace }}/weathr-core/target/release" \
-            OTHER_LDFLAGS="-L${{ github.workspace }}/weathr-core/target/release -lweathr"
+            OTHER_LDFLAGS="-L${{ github.workspace }}/weathr-core/target/release -lweathr" \
+            CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO
         working-directory: macos-screensaver
 
-      - name: Copy build output
+      - name: Find .saver path
+        id: finder
         run: |
-          cp -r ~/Library/Developer/Xcode/DerivedData/WeatherSaver-*/Build/Products/Release/Weather.saver ./build-output/
-        working-directory: macos-screensaver
+          SAVOR_PATH=$(find build/root -name "*.saver" -type d | head -1)
+          echo "path=$SAVOR_PATH" >> $GITHUB_OUTPUT
 
-      - name: Create zip
-        run: zip -r Weather.saver.zip Weather.saver
-        working-directory: macos-screensaver/build-output
-
-      - name: Get tag version
-        id: get_tag
+      - name: Package zip
         run: |
-          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
-            echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
-          else
-            # Check if there's an existing tag
-            TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-            echo "version=$TAG" >> $GITHUB_OUTPUT
-          fi
+          ditto -V -c -k --keepParent "${{ steps.finder.outputs.path }}" Weather.saver.zip
 
       - name: Upload to Release
-        if: steps.get_tag.outputs.version != ''
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
         with:
-          files: macos-screensaver/build-output/Weather.saver.zip
+          files: Weather.saver.zip
           draft: false
-          tag_name: ${{ steps.get_tag.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -70,4 +60,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: WeatherSaver
-          path: macos-screensaver/build-output/Weather.saver.zip
+          path: Weather.saver.zip
