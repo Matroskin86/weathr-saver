@@ -16,7 +16,7 @@
 		07EDA18B6CCF67F0BA48825C /* weathr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = weathr.h; sourceTree = "<group>"; };
 		66973830770A4AD99E2C7D85 /* WeatherSaver.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherSaver.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		81DB0FF0A51788EFEB08B057 /* WeatherSaverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSaverView.swift; sourceTree = "<group>"; };
-		9379D0E544141626D0DAF341 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = System/Library/Frameworks/ScreenSaver.framework; sourceTree = SDKROOT; };
+		9379D0E544141626D0DAF341 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScreenSaver.framework; sourceTree = "<group>"; };
 		D20671C84C770CE9ADDBB9B0 /* ConfigureSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureSheetController.swift; sourceTree = "<group>"; };
 		F464BC1CCA5130AD62D89F27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -148,6 +148,11 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/Library/Frameworks",
+					"\".\"",
+				);
 				INFOPLIST_FILE = WeatherSaver/Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -234,6 +239,11 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/Library/Frameworks",
+					"\".\"",
+				);
 				INFOPLIST_FILE = WeatherSaver/Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
 				LD_RUNPATH_SEARCH_PATHS = (

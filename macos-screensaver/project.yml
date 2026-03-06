@@ -37,10 +37,14 @@ targets:
         LIBRARY_SEARCH_PATHS:
           - "$(inherited)"
           - "$(BUILT_PRODUCTS_DIR)"
+        FRAMEWORK_SEARCH_PATHS:
+          - "$(inherited)"
+          - "$(SDKROOT)/System/Library/Frameworks"
         OTHER_LDFLAGS:
           - "-lweathr"
         LD_RUNPATH_SEARCH_PATHS:
           - "@executable_path/../Frameworks"
           - "@loader_path/../Frameworks"
     dependencies:
-      - sdk: ScreenSaver.framework
+      - framework: ScreenSaver.framework
+        embed: false
