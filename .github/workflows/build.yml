@@ -46,16 +46,12 @@ jobs:
       - name: Find .saver path
         id: finder
         run: |
-          find build -name "*.saver" -type d 2>/dev/null || echo "No .saver found in build"
           SAVOR_PATH=$(find build -name "*.saver" -type d 2>/dev/null | head -1)
-          echo "Found: $SAVOR_PATH"
-          if [ -n "$SAVOR_PATH" ]; then
-            echo "path=$SAVOR_PATH" >> $GITHUB_OUTPUT
-          else
-            # Try alternative location
+          if [ -z "$SAVOR_PATH" ]; then
             SAVOR_PATH=$(find . -name "*.saver" -type d 2>/dev/null | head -1)
-            echo "path=$SAVOR_PATH" >> $GITHUB_OUTPUT
           fi
+          echo "Found: $SAVOR_PATH"
+          echo "path=$SAVOR_PATH" >> $GITHUB_OUTPUT
 
       - name: Package zip
         run: |
