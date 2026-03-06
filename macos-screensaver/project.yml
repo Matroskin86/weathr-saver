@@ -1,0 +1,45 @@
+name: WeatherSaver
+options:
+  bundleIdPrefix: com.weathr
+  deploymentTarget:
+    macOS: "13.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "13.0"
+
+targets:
+  WeatherSaver:
+    type: bundle
+    platform: macOS
+    sources:
+      - path: WeatherSaver/Sources
+        type: group
+      - path: WeatherSaver/Resources
+        type: group
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.weathr.screensaver
+        PRODUCT_NAME: Weather
+        WRAPPER_EXTENSION: saver
+        INFOPLIST_FILE: WeatherSaver/Resources/Info.plist
+        SWIFT_OBJC_BRIDGING_HEADER: WeatherSaver/Sources/weathr.h
+        CLANG_ENABLE_MODULES: YES
+        SWIFT_OBJC_INTERFACE_HEADER_NAME: ""
+        COMBINE_HIDPI_IMAGES: YES
+        INSTALL_PATH: "$(HOME)/Library/Screen Savers"
+        SKIP_INSTALL: NO
+        LIBRARY_SEARCH_PATHS:
+          - "$(inherited)"
+          - "$(BUILT_PRODUCTS_DIR)"
+        OTHER_LDFLAGS:
+          - "-lweathr"
+        LD_RUNPATH_SEARCH_PATHS:
+          - "@executable_path/../Frameworks"
+          - "@loader_path/../Frameworks"
+    dependencies: []

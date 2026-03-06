@@ -1,0 +1,122 @@
+name: Build Weather Screen Saver
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [main]
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: macos-14
+    strategy:
+      matrix:
+        include:
+          - platform: macos
+            arch: arm64
+          - platform: macos
+            arch: x86_64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform }}-apple-darwin
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: "weathr-core"
+          cache-targets: true
+
+      - name: Build Rust library
+        working-directory: weathr-core
+        run: |
+          cargo build --release --target ${{ matrix.platform }}-apple-darwin
+          lipo -create target/${{ matrix.platform }}-apple-darwin/release/libweathr.a -output release/libweathr-${{ matrix.arch }}.a
+        shell: bash
+
+      - name: Create universal library
+        if: matrix.arch == 'x86_64'
+        run: |
+          mkdir -p weathr-core/release
+          lipo -create weathr-core/release/libweathr-arm64.a weathr-core/release/libweathr-x86_64.a -output weathr-core/release/libweathr.a
+
+      - name: Generate Xcode project
+        working-directory: macos-screensaver
+        run: |
+          if ! command -v xcodegen &> /dev/null; then
+            brew install xcodegen
+          fi
+          xcodegen generate
+
+      - name: Build ScreenSaver
+        working-directory: macos-screensaver
+        run: |
+          xcodebuild -project WeatherSaver.xcodeproj -scheme WeatherSaver -configuration Release -arch ${{ matrix.arch }} build
+        env:
+          LIBRARY_SEARCH_PATHS: "${{ github.workspace }}/weathr-core/release"
+          OTHER_LDFLAGS: "-L${{ github.workspace }}/weathr-core/release -lweathr"
+
+      - name: Create universal binary
+        if: matrix.arch == 'x86_64'
+        run: |
+          mkdir -p build
+          lipo -create macos-screensaver/build/Release/WeatherSaver.build/Products/Release/Weather.saver/Contents/MacOS/WeatherSaver-arm64 macos-screensaver/build/Release/WeatherSaver.build/Products/Release/Weather.saver/Contents/MacOS/WeatherSaver-x86_64 -output build/WeatherSaver
+
+      - name: Copy to bundle
+        if: matrix.arch == 'x86_64'
+        run: |
+          cp -r macos-screensaver/build/Release/WeatherSaver.build/Products/Release/Weather.saver build/
+          rm -rf build/WeatherSaver/Contents/MacOS/WeatherSaver
+          cp build/WeatherSaver build/WeatherSaver.tmp
+          lipo -create build/WeatherSaver.tmp build/WeatherSaver.tmp -output build/WeatherSaver
+          rm build/WeatherSaver.tmp
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WeatherSaver-${{ matrix.arch }}
+          path: build/WeatherSaver.saver
+          retention-days: 5
+
+  release:
+    needs: build
+    runs-on: macos-14
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Merge universal binary
+        run: |
+          mkdir -p WeatherSaver/Contents/MacOS
+          lipo -create artifacts/WeatherSaver-arm64/WeatherSaver/Contents/MacOS/WeatherSaver artifacts/WeatherSaver-x86_64/WeatherSaver/Contents/MacOS/WeatherSaver -output WeatherSaver/Contents/MacOS/WeatherSaver
+
+      - name: Copy resources
+        run: |
+          cp -r artifacts/WeatherSaver-arm64/WeatherSaver/Contents/Resources WeatherSaver/Contents/
+          cp artifacts/WeatherSaver-arm64/WeatherSaver/Contents/Info.plist WeatherSaver/Contents/
+
+      - name: Create zip
+        run: |
+          zip -r Weather.saver.zip WeatherSaver
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Weather.saver.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
