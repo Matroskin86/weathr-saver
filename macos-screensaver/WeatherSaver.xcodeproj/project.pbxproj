@@ -9,17 +9,38 @@
 /* Begin PBXBuildFile section */
 		5AB664B5984FD623CD7A41BA /* ConfigureSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20671C84C770CE9ADDBB9B0 /* ConfigureSheetController.swift */; };
 		BDC9DF378DD6E4319474E2DA /* WeatherSaverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DB0FF0A51788EFEB08B057 /* WeatherSaverView.swift */; };
+		CC83963D8AA679EC7D27F0C4 /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9379D0E544141626D0DAF341 /* ScreenSaver.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		07EDA18B6CCF67F0BA48825C /* weathr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = weathr.h; sourceTree = "<group>"; };
 		66973830770A4AD99E2C7D85 /* WeatherSaver.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherSaver.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		81DB0FF0A51788EFEB08B057 /* WeatherSaverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSaverView.swift; sourceTree = "<group>"; };
+		9379D0E544141626D0DAF341 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = System/Library/Frameworks/ScreenSaver.framework; sourceTree = SDKROOT; };
 		D20671C84C770CE9ADDBB9B0 /* ConfigureSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureSheetController.swift; sourceTree = "<group>"; };
 		F464BC1CCA5130AD62D89F27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFrameworksBuildPhase section */
+		0AD92209BC77E12448C90515 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC83963D8AA679EC7D27F0C4 /* ScreenSaver.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
+		2B23D0B2F40D59790EBE4718 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9379D0E544141626D0DAF341 /* ScreenSaver.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		94CD07B7283ADC87B80CDB70 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -44,6 +65,7 @@
 			children = (
 				F0CAA9A33F10445F9C8B0D83 /* Resources */,
 				CC7242732000B162E99FDFBB /* Sources */,
+				2B23D0B2F40D59790EBE4718 /* Frameworks */,
 				94CD07B7283ADC87B80CDB70 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -65,6 +87,7 @@
 			buildConfigurationList = FE2C25E2C89F7EA8D3D9BAA4 /* Build configuration list for PBXNativeTarget "WeatherSaver" */;
 			buildPhases = (
 				C05595ED6D21AF682F5B581A /* Sources */,
+				0AD92209BC77E12448C90515 /* Frameworks */,
 			);
 			buildRules = (
 			);

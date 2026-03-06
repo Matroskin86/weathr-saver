@@ -42,4 +42,5 @@ targets:
         LD_RUNPATH_SEARCH_PATHS:
           - "@executable_path/../Frameworks"
           - "@loader_path/../Frameworks"
-    dependencies: []
+    dependencies:
+      - sdk: ScreenSaver.framework
