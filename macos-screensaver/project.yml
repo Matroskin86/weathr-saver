@@ -36,11 +36,10 @@ targets:
         SKIP_INSTALL: NO
         LIBRARY_SEARCH_PATHS:
           - "$(inherited)"
-          - "$(BUILT_PRODUCTS_DIR)"
-        FRAMEWORK_SEARCH_PATHS:
-          - "$(inherited)"
-          - "$(SDKROOT)/System/Library/Frameworks"
+          - "$(SRCROOT)/../weathr-core/target/release"
+          - "$(PROJECT_DIR)/../weathr-core/target/release"
         OTHER_LDFLAGS:
+          - "-L$(SRCROOT)/../weathr-core/target/release"
           - "-lweathr"
         LD_RUNPATH_SEARCH_PATHS:
           - "@executable_path/../Frameworks"

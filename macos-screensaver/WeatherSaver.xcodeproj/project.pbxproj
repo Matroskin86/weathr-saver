@@ -162,7 +162,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/System/Library/Frameworks",
 					"\".\"",
 				);
 				INFOPLIST_FILE = WeatherSaver/Resources/Info.plist;
@@ -173,9 +172,11 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(BUILT_PRODUCTS_DIR)",
+					"$(SRCROOT)/../weathr-core/target/release",
+					"$(PROJECT_DIR)/../weathr-core/target/release",
 				);
 				OTHER_LDFLAGS = (
+					"-L$(SRCROOT)/../weathr-core/target/release",
 					"-lweathr",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.weathr.screensaver;
@@ -253,7 +254,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/System/Library/Frameworks",
 					"\".\"",
 				);
 				INFOPLIST_FILE = WeatherSaver/Resources/Info.plist;
@@ -264,9 +264,11 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(BUILT_PRODUCTS_DIR)",
+					"$(SRCROOT)/../weathr-core/target/release",
+					"$(PROJECT_DIR)/../weathr-core/target/release",
 				);
 				OTHER_LDFLAGS = (
+					"-L$(SRCROOT)/../weathr-core/target/release",
 					"-lweathr",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.weathr.screensaver;
