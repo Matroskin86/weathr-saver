@@ -7,14 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B1406FFE61D4EB7E7CB035C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20F9E18A9CE892AFCB687B0C /* SystemConfiguration.framework */; };
+		21E042A1CEA213533EC3C8CE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2325B7A5EF16CBE632E0EED2 /* Security.framework */; };
 		5AB664B5984FD623CD7A41BA /* ConfigureSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20671C84C770CE9ADDBB9B0 /* ConfigureSheetController.swift */; };
+		5CD84F6E39BA072CA0284185 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6737296C1ECF4B7F052BA759 /* Foundation.framework */; };
 		BDC9DF378DD6E4319474E2DA /* WeatherSaverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DB0FF0A51788EFEB08B057 /* WeatherSaverView.swift */; };
 		CC83963D8AA679EC7D27F0C4 /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9379D0E544141626D0DAF341 /* ScreenSaver.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		07EDA18B6CCF67F0BA48825C /* weathr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = weathr.h; sourceTree = "<group>"; };
+		20F9E18A9CE892AFCB687B0C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		2325B7A5EF16CBE632E0EED2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		66973830770A4AD99E2C7D85 /* WeatherSaver.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherSaver.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		6737296C1ECF4B7F052BA759 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		81DB0FF0A51788EFEB08B057 /* WeatherSaverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSaverView.swift; sourceTree = "<group>"; };
 		9379D0E544141626D0DAF341 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScreenSaver.framework; sourceTree = "<group>"; };
 		D20671C84C770CE9ADDBB9B0 /* ConfigureSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureSheetController.swift; sourceTree = "<group>"; };
@@ -27,6 +33,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC83963D8AA679EC7D27F0C4 /* ScreenSaver.framework in Frameworks */,
+				0B1406FFE61D4EB7E7CB035C /* SystemConfiguration.framework in Frameworks */,
+				21E042A1CEA213533EC3C8CE /* Security.framework in Frameworks */,
+				5CD84F6E39BA072CA0284185 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -36,7 +45,10 @@
 		2B23D0B2F40D59790EBE4718 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6737296C1ECF4B7F052BA759 /* Foundation.framework */,
 				9379D0E544141626D0DAF341 /* ScreenSaver.framework */,
+				2325B7A5EF16CBE632E0EED2 /* Security.framework */,
+				20F9E18A9CE892AFCB687B0C /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

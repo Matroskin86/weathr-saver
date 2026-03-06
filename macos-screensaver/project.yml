@@ -48,3 +48,6 @@ targets:
     dependencies:
       - framework: ScreenSaver.framework
         embed: false
+      - sdk: SystemConfiguration.framework
+      - sdk: Security.framework
+      - sdk: Foundation.framework
