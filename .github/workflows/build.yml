@@ -39,7 +39,6 @@ jobs:
       - name: Copy build output
         run: |
           cp -r ~/Library/Developer/Xcode/DerivedData/WeatherSaver-*/Build/Products/Release/Weather.saver ./build-output/
-          mkdir -p build-output/Weather.saver/Contents/MacOS
         working-directory: macos-screensaver
 
       - name: Create zip
