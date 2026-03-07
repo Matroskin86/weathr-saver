@@ -61,9 +61,25 @@ jobs:
             ls -la "$SAVOR_PATH/Contents/Frameworks/"
           fi
 
+      - name: Sign entire bundle
+        run: |
+          SAVOR_PATH=$(find $GITHUB_WORKSPACE/build -name "*.saver" -type d 2>/dev/null | head -1)
+          if [ -n "$SAVOR_PATH" ]; then
+            # Sign the entire bundle
+            codesign --force --deep --sign - "$SAVOR_PATH"
+            # Verify signature
+            codesign --verify --verbose=2 "$SAVOR_PATH" || true
+          fi
+
       - name: Package zip
         run: |
           SAVOR_PATH=$(find $GITHUB_WORKSPACE/build -name "*.saver" -type d 2>/dev/null | head -1)
+          if [ -n "$SAVOR_PATH" ]; then
+            # Sign the entire bundle
+            codesign --force --deep --sign - "$SAVOR_PATH"
+            # Remove quarantine if present
+            xattr -cr "$SAVOR_PATH" || true
+          fi
           ditto -V -c -k --keepParent "$SAVOR_PATH" $GITHUB_WORKSPACE/Weather.saver.zip
           ls -la $GITHUB_WORKSPACE/Weather.saver.zip
 
