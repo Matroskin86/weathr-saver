@@ -1,11 +1,10 @@
 #import <ScreenSaver/ScreenSaver.h>
+#import "weathr.h"
 
 @interface WeatherSaverView : ScreenSaverView
 {
-    NSTimer *animationTimer;
     NSInteger frameCount;
 }
-
 @end
 
 @implementation WeatherSaverView
@@ -15,8 +14,12 @@
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
         frameCount = 0;
-        NSLog(@"WeatherSaver: initialized with frame %@", NSStringFromRect(frame));
-        [self setAnimationTimeInterval:1.0];
+        NSLog(@"WeatherSaver: initializing...");
+        
+        weathr_init();
+        
+        NSLog(@"WeatherSaver: initialized successfully");
+        [self setAnimationTimeInterval:0.1];
     }
     return self;
 }
@@ -37,14 +40,21 @@
 {
     NSLog(@"WeatherSaver: drawRect called, frame %ld", (long)frameCount);
     
-    // Black background
     [[NSColor blackColor] setFill];
     NSRectFill(rect);
     
-    // White text
-    NSFont *font = [NSFont fontWithName:@"Menlo" size:12];
+    weathr_update_if_needed();
+    
+    char *frame = weathr_render_frame();
+    NSString *text = @"Loading...";
+    if (frame != NULL) {
+        text = [NSString stringWithUTF8String:frame];
+        weathr_free_string(frame);
+    }
+    
+    NSFont *font = [NSFont fontWithName:@"Menlo" size:10];
     if (!font) {
-        font = [NSFont monospacedSystemFontOfSize:12 weight:NSFontWeightRegular];
+        font = [NSFont monospacedSystemFontOfSize:10 weight:NSFontWeightRegular];
     }
     
     NSDictionary *attrs = @{
@@ -52,36 +62,15 @@
         NSForegroundColorAttributeName: [NSColor whiteColor]
     };
     
-    NSString *text = [self createFrame];
     NSSize textSize = [text sizeWithAttributes:attrs];
     
     NSPoint textPoint;
-    textPoint.x = (rect.size.width - textSize.width) / 2;
-    textPoint.y = (rect.size.height - textSize.height) / 2;
+    textPoint.x = 10;
+    textPoint.y = rect.size.height - textSize.height - 10;
     
     [text drawAtPoint:textPoint withAttributes:attrs];
     
     frameCount++;
-}
-
-- (NSString *)createFrame
-{
-    return [NSString stringWithFormat:@"\
-========================================\n\
-WEATHER SCREENSAVER\n\
-Frame: %ld\n\
-Size: %.0f x %.0f\n\
-========================================\n\
-     .   .   .\n\
-  .    CLEAR    .\n\
-     ~ ~ ~ ~\n\
-Temperature: 22°C\n\
-Wind: 12 km/h\n\
-========================================",
-        (long)frameCount,
-        self.bounds.size.width,
-        self.bounds.size.height
-    ];
 }
 
 - (BOOL)hasConfigureSheet

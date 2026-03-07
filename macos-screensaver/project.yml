@@ -19,6 +19,12 @@ targets:
     sources:
       - path: WeatherSaver/Sources
         type: group
+        excludes:
+          - "Frameworks/**"
+      - path: WeatherSaver/Sources/Frameworks
+        type: folder
+        buildPhase: copyFiles
+        destination: frameworks
       - path: WeatherSaver/Resources
         type: group
     settings:
@@ -28,10 +34,12 @@ targets:
         WRAPPER_EXTENSION: saver
         INFOPLIST_FILE: WeatherSaver/Resources/Info.plist
         CLANG_ENABLE_MODULES: YES
-        SWIFT_OBJC_INTERFACE_HEADER_NAME: ""
         COMBINE_HIDPI_IMAGES: YES
         INSTALL_PATH: "$(HOME)/Library/Screen Savers"
         SKIP_INSTALL: NO
+        LD_RUNPATH_SEARCH_PATHS:
+          - "@executable_path/../Frameworks"
+          - "@loader_path/../Frameworks"
     dependencies:
       - framework: ScreenSaver.framework
         embed: false
