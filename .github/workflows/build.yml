@@ -50,22 +50,28 @@ jobs:
         run: |
           SAVOR_PATH=$(find $GITHUB_WORKSPACE/build -name "*.saver" -type d 2>/dev/null | head -1)
           if [ -n "$SAVOR_PATH" ]; then
-            # Create Frameworks directory
+            # Copy dylib to Frameworks
             mkdir -p "$SAVOR_PATH/Contents/Frameworks"
-            # Move dylib from Resources to Frameworks
-            if [ -f "$SAVOR_PATH/Contents/Resources/libweathr.dylib" ]; then
-              mv "$SAVOR_PATH/Contents/Resources/libweathr.dylib" "$SAVOR_PATH/Contents/Frameworks/"
-            fi
-            # Also copy from build if needed
-            if [ -f "$GITHUB_WORKSPACE/weathr-core/target/release/libweathr.dylib" ]; then
-              cp "$GITHUB_WORKSPACE/weathr-core/target/release/libweathr.dylib" "$SAVOR_PATH/Contents/Frameworks/"
-            fi
+            cp "$GITHUB_WORKSPACE/weathr-core/target/release/libweathr.dylib" "$SAVOR_PATH/Contents/Frameworks/"
+            
             # Fix dylib id
-            install_name_tool -id "@executable_path/../Frameworks/libweathr.dylib" "$SAVOR_PATH/Contents/Frameworks/libweathr.dylib" 2>/dev/null || true
-            # Update executable to find the dylib
-            if [ -f "$SAVOR_PATH/Contents/MacOS/Weather" ]; then
-              install_name_tool -change "libweathr.dylib" "@executable_path/../Frameworks/libweathr.dylib" "$SAVOR_PATH/Contents/MacOS/Weather" 2>/dev/null || true
+            install_name_tool -id "@executable_path/../Frameworks/libweathr.dylib" "$SAVOR_PATH/Contents/Frameworks/libweathr.dylib"
+            
+            # FIX EXECUTABLE - replace ALL paths to libweathr
+            EXEC_PATH="$SAVOR_PATH/Contents/MacOS/Weather"
+            if [ -f "$EXEC_PATH" ]; then
+              # Show current dependencies
+              otool -L "$EXEC_PATH" | grep weathr
+              
+              # Replace all possible paths
+              install_name_tool -change "/Users/runner/work/weathr-saver/weathr-saver/weathr-core/target/release/deps/libweathr.dylib" "@executable_path/../Frameworks/libweathr.dylib" "$EXEC_PATH" || true
+              install_name_tool -change "/Users/runner/work/weathr-saver/weathr-saver/weathr-core/target/release/libweathr.dylib" "@executable_path/../Frameworks/libweathr.dylib" "$EXEC_PATH" || true
+              install_name_tool -change "libweathr.dylib" "@executable_path/../Frameworks/libweathr.dylib" "$EXEC_PATH" || true
+              
+              # Show new dependencies
+              otool -L "$EXEC_PATH" | grep weathr
             fi
+            
             ls -laR "$SAVOR_PATH/Contents/"
           fi
 
