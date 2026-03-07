@@ -20,7 +20,10 @@ targets:
       - path: WeatherSaver/Sources
         type: group
         excludes:
-          - "Frameworks/**"
+          - "weathr.h"
+      - path: WeatherSaver/Sources/weathr.h
+        type: file
+        buildPhase: none
       - path: WeatherSaver/Resources
         type: group
     settings:
@@ -33,6 +36,10 @@ targets:
         COMBINE_HIDPI_IMAGES: YES
         INSTALL_PATH: "$(HOME)/Library/Screen Savers"
         SKIP_INSTALL: NO
+        LIBRARY_SEARCH_PATHS:
+          - "$(SRCROOT)/../weathr-core/target/release"
+        OTHER_LDFLAGS:
+          - "$(SRCROOT)/../weathr-core/target/release/libweathr.dylib"
         LD_RUNPATH_SEARCH_PATHS:
           - "@executable_path/../Frameworks"
           - "@loader_path/../Frameworks"
