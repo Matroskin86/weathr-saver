@@ -35,6 +35,8 @@ jobs:
           cp weathr-core/target/release/libweathr.dylib macos-screensaver/WeatherSaver/Sources/Frameworks/
           chmod +w macos-screensaver/WeatherSaver/Sources/Frameworks/libweathr.dylib
           install_name_tool -id "@executable_path/../Frameworks/libweathr.dylib" macos-screensaver/WeatherSaver/Sources/Frameworks/libweathr.dylib || true
+          # Sign the dylib with ad-hoc signature
+          codesign --force --sign - macos-screensaver/WeatherSaver/Sources/Frameworks/libweathr.dylib
 
       - name: Update project sources
         run: |
@@ -54,6 +56,8 @@ jobs:
           if [ -n "$SAVOR_PATH" ]; then
             mkdir -p "$SAVOR_PATH/Contents/Frameworks"
             cp weathr-core/target/release/libweathr.dylib "$SAVOR_PATH/Contents/Frameworks/"
+            # Sign the dylib
+            codesign --force --sign - "$SAVOR_PATH/Contents/Frameworks/libweathr.dylib"
             ls -la "$SAVOR_PATH/Contents/Frameworks/"
           fi
 
