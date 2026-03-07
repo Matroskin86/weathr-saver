@@ -44,7 +44,7 @@
     // Draw text
     NSFont *font = [NSFont fontWithName:@"Menlo" size:10];
     if (!font) {
-        font = [NSFont monospacedSystemFontOfSize:10];
+        font = [NSFont systemFontOfSize:10];
     }
     
     NSDictionary *attrs = @{
