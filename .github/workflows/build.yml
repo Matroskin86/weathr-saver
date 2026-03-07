@@ -23,52 +23,39 @@ jobs:
 
       - name: Build Rust
         run: |
+          cd weathr-core
           cargo build --release
           ls -la target/release/libweathr.*
-        working-directory: weathr-core
 
-      - name: Copy dylib to project
+      - name: Copy Rust library to Swift project
         run: |
-          cp target/release/libweathr.dylib ../macos-screensaver/WeatherSaver/Sources/
-          install_name_tool -id "@executable_path/../Frameworks/libweathr.dylib" ../macos-screensaver/WeatherSaver/Sources/libweathr.dylib
-        working-directory: weathr-core
+          cp weathr-core/target/release/libweathr.dylib macos-screensaver/WeatherSaver/Sources/
+          install_name_tool -id "@executable_path/../Frameworks/libweathr.dylib" macos-screensaver/WeatherSaver/Sources/libweathr.dylib
 
       - name: Generate Xcode
         run: |
+          cd macos-screensaver
           xcodegen generate
-          # Fix project format for Xcode 15.4 compatibility
           sed -i '' 's/objectVersion = 77;/objectVersion = 56;/g' WeatherSaver.xcodeproj/project.pbxproj
-        working-directory: macos-screensaver
 
-      - name: Build and Install ScreenSaver
+      - name: Build ScreenSaver
         run: |
-          # Debug: check if library exists
-          ls -la ../weathr-core/target/release/libweathr.a || echo "Library not found!"
-          
-          xcodebuild -project WeatherSaver.xcodeproj -scheme WeatherSaver -configuration Release install DSTROOT=build/root \
-            LIBRARY_SEARCH_PATHS="${{ github.workspace }}/weathr-core/target/release" \
-            OTHER_LDFLAGS="-L${{ github.workspace }}/weathr-core/target/release -lweathr" \
-            CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO
-        working-directory: macos-screensaver
+          cd macos-screensaver
+          xcodebuild -project WeatherSaver.xcodeproj -scheme WeatherSaver -configuration Release install DSTROOT=$GITHUB_WORKSPACE/build/root CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO
 
-      - name: Find .saver path
-        id: finder
+      - name: Copy dylib to bundle
         run: |
-          SAVOR_PATH=$(find build -name "*.saver" -type d 2>/dev/null | head -1)
-          if [ -z "$SAVOR_PATH" ]; then
-            SAVOR_PATH=$(find . -name "*.saver" -type d 2>/dev/null | head -1)
-          fi
-          # Copy dylib to bundle
-          if [ -n "$SAVOR_PATH" ]; then
-            mkdir -p "$SAVOR_PATH/Contents/Frameworks"
-            cp ../weathr-core/target/release/libweathr.dylib "$SAVOR_PATH/Contents/Frameworks/"
-          fi
-          echo "Found: $SAVOR_PATH"
-          echo "path=$SAVOR_PATH" >> $GITHUB_OUTPUT
+          SAVOR_PATH=$(find $GITHUB_WORKSPACE/build -name "*.saver" -type d 2>/dev/null | head -1)
+          echo "Found .saver at: $SAVOR_PATH"
+          mkdir -p "$SAVOR_PATH/Contents/Frameworks"
+          cp $GITHUB_WORKSPACE/weathr-core/target/release/libweathr.dylib "$SAVOR_PATH/Contents/Frameworks/"
+          echo "Copied dylib to bundle"
 
       - name: Package zip
         run: |
-          ditto -V -c -k --keepParent "${{ steps.finder.outputs.path }}" Weather.saver.zip
+          SAVOR_PATH=$(find $GITHUB_WORKSPACE/build -name "*.saver" -type d 2>/dev/null | head -1)
+          ditto -V -c -k --keepParent "$SAVOR_PATH" $GITHUB_WORKSPACE/Weather.saver.zip
+          ls -la $GITHUB_WORKSPACE/Weather.saver.zip
 
       - name: Upload to Release
         if: startsWith(github.ref, 'refs/tags/v')
