@@ -175,8 +175,14 @@
 				INFOPLIST_FILE = WeatherSaver/Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
 				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../weathr-core/target/release",
+				);
+				OTHER_LDFLAGS = (
+					"$(SRCROOT)/../weathr-core/target/release/libweathr.dylib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.weathr.screensaver;
 				PRODUCT_NAME = Weather;
@@ -256,8 +262,14 @@
 				INFOPLIST_FILE = WeatherSaver/Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
 				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../weathr-core/target/release",
+				);
+				OTHER_LDFLAGS = (
+					"$(SRCROOT)/../weathr-core/target/release/libweathr.dylib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.weathr.screensaver;
 				PRODUCT_NAME = Weather;

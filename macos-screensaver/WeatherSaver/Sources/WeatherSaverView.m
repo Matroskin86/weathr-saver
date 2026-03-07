@@ -1,4 +1,5 @@
 #import <ScreenSaver/ScreenSaver.h>
+#import "weathr.h"
 
 @interface WeatherSaverView : ScreenSaverView
 @end
@@ -9,41 +10,49 @@
 {
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
-        NSLog(@"WeatherSaver: INITIALIZED");
-        [self setAnimationTimeInterval:0.5];
+        NSLog(@"WeatherSaver: initializing...");
+        
+        weathr_init();
+        
+        NSLog(@"WeatherSaver: initialized");
+        [self setAnimationTimeInterval:0.1];
     }
     return self;
 }
 
 - (void)animateOneFrame
 {
-    NSLog(@"WeatherSaver: animateOneFrame");
     [self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)rect
 {
-    NSLog(@"WeatherSaver: drawRect");
-    
-    // RED background - very visible!
-    [[NSColor redColor] setFill];
+    // Black background
+    [[NSColor blackColor] setFill];
     NSRectFill(rect);
     
-    // White text
-    NSString *text = @"SCREENSAVER WORKS!";
-    NSFont *font = [NSFont boldSystemFontOfSize:48];
+    // Get weather frame
+    weathr_update_if_needed();
+    
+    char *frame = weathr_render_frame();
+    NSString *text = @"Loading...";
+    if (frame != NULL) {
+        text = [NSString stringWithUTF8String:frame];
+        weathr_free_string(frame);
+    }
+    
+    // Draw text
+    NSFont *font = [NSFont fontWithName:@"Menlo" size:10];
+    if (!font) {
+        font = [NSFont monospacedSystemFontOfSize:10];
+    }
     
     NSDictionary *attrs = @{
         NSFontAttributeName: font,
         NSForegroundColorAttributeName: [NSColor whiteColor]
     };
     
-    NSSize textSize = [text sizeWithAttributes:attrs];
-    NSPoint textPoint;
-    textPoint.x = (rect.size.width - textSize.width) / 2;
-    textPoint.y = (rect.size.height - textSize.height) / 2;
-    
-    [text drawAtPoint:textPoint withAttributes:attrs];
+    [text drawAtPoint:NSMakePoint(10, 10) withAttributes:attrs];
 }
 
 - (BOOL)hasConfigureSheet
