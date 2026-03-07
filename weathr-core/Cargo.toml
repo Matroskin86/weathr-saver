@@ -7,7 +7,7 @@ description = "Weather rendering library with C ABI for macOS ScreenSaver"
 
 [lib]
 name = "weathr"
-crate-type = ["staticlib"]
+crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
 libc = "0.2"

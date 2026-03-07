@@ -25,6 +25,12 @@ jobs:
         run: cargo build --release
         working-directory: weathr-core
 
+      - name: Copy dylib to project
+        run: |
+          cp ../weathr-core/target/release/libweathr.dylib macos-screensaver/WeatherSaver/Sources/
+          install_name_tool -id "@executable_path/../Frameworks/libweathr.dylib" macos-screensaver/WeatherSaver/Sources/libweathr.dylib
+        working-directory: ${{ github.workspace }}
+
       - name: Generate Xcode
         run: |
           xcodegen generate
@@ -49,6 +55,10 @@ jobs:
           SAVOR_PATH=$(find build -name "*.saver" -type d 2>/dev/null | head -1)
           if [ -z "$SAVOR_PATH" ]; then
             SAVOR_PATH=$(find . -name "*.saver" -type d 2>/dev/null | head -1)
+          fi
+          # Copy dylib to bundle
+          if [ -n "$SAVOR_PATH" ]; then
+            cp ../weathr-core/target/release/libweathr.dylib "$SAVOR_PATH/Contents/Frameworks/"
           fi
           echo "Found: $SAVOR_PATH"
           echo "path=$SAVOR_PATH" >> $GITHUB_OUTPUT
