@@ -21,13 +21,24 @@ jobs:
       - name: Install XcodeGen
         run: brew install xcodegen
 
-      - name: Build Rust
+      - name: Build Rust dylib
         run: |
           cd weathr-core
           cargo build --release
+          ls -la target/release/libweathr.*
 
-      - name: Generate Xcode
+      - name: Prepare dylib
         run: |
+          # Create Frameworks directory in the saver sources
+          mkdir -p macos-screensaver/WeatherSaver/Sources/Frameworks
+          # Copy and set id for dylib
+          cp weathr-core/target/release/libweathr.dylib macos-screensaver/WeatherSaver/Sources/Frameworks/
+          chmod +w macos-screensaver/WeatherSaver/Sources/Frameworks/libweathr.dylib
+          install_name_tool -id "@executable_path/../Frameworks/libweathr.dylib" macos-screensaver/WeatherSaver/Sources/Frameworks/libweathr.dylib || true
+
+      - name: Update project sources
+        run: |
+          # Add Frameworks to Xcode sources
           cd macos-screensaver
           xcodegen generate
           sed -i '' 's/objectVersion = 77;/objectVersion = 56;/g' WeatherSaver.xcodeproj/project.pbxproj
@@ -37,10 +48,20 @@ jobs:
           cd macos-screensaver
           xcodebuild -project WeatherSaver.xcodeproj -scheme WeatherSaver -configuration Release install DSTROOT=$GITHUB_WORKSPACE/build/root CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO
 
+      - name: Copy dylib to bundle
+        run: |
+          SAVOR_PATH=$(find $GITHUB_WORKSPACE/build -name "*.saver" -type d 2>/dev/null | head -1)
+          if [ -n "$SAVOR_PATH" ]; then
+            mkdir -p "$SAVOR_PATH/Contents/Frameworks"
+            cp weathr-core/target/release/libweathr.dylib "$SAVOR_PATH/Contents/Frameworks/"
+            ls -la "$SAVOR_PATH/Contents/Frameworks/"
+          fi
+
       - name: Package zip
         run: |
           SAVOR_PATH=$(find $GITHUB_WORKSPACE/build -name "*.saver" -type d 2>/dev/null | head -1)
           ditto -V -c -k --keepParent "$SAVOR_PATH" $GITHUB_WORKSPACE/Weather.saver.zip
+          ls -la $GITHUB_WORKSPACE/Weather.saver.zip
 
       - name: Upload to Release
         if: startsWith(github.ref, 'refs/tags/v')

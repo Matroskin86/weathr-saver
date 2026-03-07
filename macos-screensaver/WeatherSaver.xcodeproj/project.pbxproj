@@ -167,17 +167,11 @@
 				INFOPLIST_FILE = WeatherSaver/Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
 				LD_RUNPATH_SEARCH_PATHS = (
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../weathr-core/target/release",
-					"$(PROJECT_DIR)/../weathr-core/target/release",
+					"@executable_path/../Frameworks",
 				);
 				OTHER_LDFLAGS = (
-					"-L$(SRCROOT)/../weathr-core/target/release",
-					"-lweathr",
+					"$(SRCROOT)/../weathr-core/target/release/libweathr.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.weathr.screensaver;
 				PRODUCT_NAME = Weather;
@@ -259,17 +253,11 @@
 				INFOPLIST_FILE = WeatherSaver/Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
 				LD_RUNPATH_SEARCH_PATHS = (
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../weathr-core/target/release",
-					"$(PROJECT_DIR)/../weathr-core/target/release",
+					"@executable_path/../Frameworks",
 				);
 				OTHER_LDFLAGS = (
-					"-L$(SRCROOT)/../weathr-core/target/release",
-					"-lweathr",
+					"$(SRCROOT)/../weathr-core/target/release/libweathr.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.weathr.screensaver;
 				PRODUCT_NAME = Weather;
