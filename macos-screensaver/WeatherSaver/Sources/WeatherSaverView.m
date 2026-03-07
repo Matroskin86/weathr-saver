@@ -2,9 +2,6 @@
 #import "weathr.h"
 
 @interface WeatherSaverView : ScreenSaverView
-{
-    NSInteger frameCount;
-}
 @end
 
 @implementation WeatherSaverView
@@ -13,36 +10,33 @@
 {
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
-        frameCount = 0;
         NSLog(@"WeatherSaver: initializing...");
         
         weathr_init();
         
-        NSLog(@"WeatherSaver: initialized successfully");
+        NSLog(@"WeatherSaver: initialized");
         [self setAnimationTimeInterval:0.1];
     }
     return self;
 }
 
-- (void)startAnimation
+- (void)animateOneFrame
 {
-    [super startAnimation];
-    NSLog(@"WeatherSaver: startAnimation");
-}
-
-- (void)stopAnimation
-{
-    [super stopAnimation];
-    NSLog(@"WeatherSaver: stopAnimation");
+    NSLog(@"WeatherSaver: animateOneFrame called");
+    
+    // THIS IS THE KEY - tell the view it needs to redraw
+    [self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)rect
 {
-    NSLog(@"WeatherSaver: drawRect called, frame %ld", (long)frameCount);
+    NSLog(@"WeatherSaver: drawRect called");
     
+    // Black background
     [[NSColor blackColor] setFill];
     NSRectFill(rect);
     
+    // Get weather frame
     weathr_update_if_needed();
     
     char *frame = weathr_render_frame();
@@ -52,6 +46,7 @@
         weathr_free_string(frame);
     }
     
+    // Draw text
     NSFont *font = [NSFont fontWithName:@"Menlo" size:10];
     if (!font) {
         font = [NSFont monospacedSystemFontOfSize:10 weight:NSFontWeightRegular];
@@ -62,15 +57,7 @@
         NSForegroundColorAttributeName: [NSColor whiteColor]
     };
     
-    NSSize textSize = [text sizeWithAttributes:attrs];
-    
-    NSPoint textPoint;
-    textPoint.x = 10;
-    textPoint.y = rect.size.height - textSize.height - 10;
-    
-    [text drawAtPoint:textPoint withAttributes:attrs];
-    
-    frameCount++;
+    [text drawAtPoint:NSMakePoint(10, 10) withAttributes:attrs];
 }
 
 - (BOOL)hasConfigureSheet
