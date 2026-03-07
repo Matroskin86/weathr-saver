@@ -31,9 +31,9 @@ jobs:
 
       - name: Copy dylib to project
         run: |
-          cp ../weathr-core/target/release/libweathr.dylib macos-screensaver/WeatherSaver/Sources/
-          install_name_tool -id "@executable_path/../Frameworks/libweathr.dylib" macos-screensaver/WeatherSaver/Sources/libweathr.dylib
-        working-directory: ${{ github.workspace }}
+          cp target/release/libweathr.dylib ../macos-screensaver/WeatherSaver/Sources/
+          install_name_tool -id "@executable_path/../Frameworks/libweathr.dylib" ../macos-screensaver/WeatherSaver/Sources/libweathr.dylib
+        working-directory: weathr-core
 
       - name: Generate Xcode
         run: |
