@@ -34,16 +34,8 @@ targets:
         COMBINE_HIDPI_IMAGES: YES
         INSTALL_PATH: "$(HOME)/Library/Screen Savers"
         SKIP_INSTALL: NO
-        LIBRARY_SEARCH_PATHS:
-          - "$(inherited)"
-          - "$(SRCROOT)/../weathr-core/target/release"
-          - "$(PROJECT_DIR)/../weathr-core/target/release"
         OTHER_LDFLAGS:
-          - "-L$(SRCROOT)/../weathr-core/target/release"
-          - "-lweathr"
-        LD_RUNPATH_SEARCH_PATHS:
-          - "@executable_path/../Frameworks"
-          - "@loader_path/../Frameworks"
+          - "$(SRCROOT)/../weathr-core/target/release/libweathr.a"
     dependencies:
       - framework: ScreenSaver.framework
         embed: false
