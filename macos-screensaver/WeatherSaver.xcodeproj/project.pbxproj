@@ -9,18 +9,18 @@
 /* Begin PBXBuildFile section */
 		0B1406FFE61D4EB7E7CB035C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20F9E18A9CE892AFCB687B0C /* SystemConfiguration.framework */; };
 		21E042A1CEA213533EC3C8CE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2325B7A5EF16CBE632E0EED2 /* Security.framework */; };
+		36C12497099CED97B3F7B748 /* WeatherSaverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1538CABDC0FFD8A3813823B0 /* WeatherSaverView.m */; };
 		5AB664B5984FD623CD7A41BA /* ConfigureSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20671C84C770CE9ADDBB9B0 /* ConfigureSheetController.swift */; };
 		5CD84F6E39BA072CA0284185 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6737296C1ECF4B7F052BA759 /* Foundation.framework */; };
-		BDC9DF378DD6E4319474E2DA /* WeatherSaverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DB0FF0A51788EFEB08B057 /* WeatherSaverView.swift */; };
 		CC83963D8AA679EC7D27F0C4 /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9379D0E544141626D0DAF341 /* ScreenSaver.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1538CABDC0FFD8A3813823B0 /* WeatherSaverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherSaverView.m; sourceTree = "<group>"; };
 		20F9E18A9CE892AFCB687B0C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		2325B7A5EF16CBE632E0EED2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		66973830770A4AD99E2C7D85 /* WeatherSaver.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherSaver.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		6737296C1ECF4B7F052BA759 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		81DB0FF0A51788EFEB08B057 /* WeatherSaverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSaverView.swift; sourceTree = "<group>"; };
 		9379D0E544141626D0DAF341 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScreenSaver.framework; sourceTree = "<group>"; };
 		D20671C84C770CE9ADDBB9B0 /* ConfigureSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureSheetController.swift; sourceTree = "<group>"; };
 		F464BC1CCA5130AD62D89F27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -64,7 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				D20671C84C770CE9ADDBB9B0 /* ConfigureSheetController.swift */,
-				81DB0FF0A51788EFEB08B057 /* WeatherSaverView.swift */,
+				1538CABDC0FFD8A3813823B0 /* WeatherSaverView.m */,
 			);
 			name = Sources;
 			path = WeatherSaver/Sources;
@@ -146,7 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AB664B5984FD623CD7A41BA /* ConfigureSheetController.swift in Sources */,
-				BDC9DF378DD6E4319474E2DA /* WeatherSaverView.swift in Sources */,
+				36C12497099CED97B3F7B748 /* WeatherSaverView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,7 +231,7 @@
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.9;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -320,7 +320,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.9;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
