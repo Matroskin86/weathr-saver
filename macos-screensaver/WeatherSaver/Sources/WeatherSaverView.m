@@ -31,7 +31,7 @@
     
     // White text
     NSString *text = @"SCREENSAVER WORKS!";
-    NSFont *font = [NSFont boldSystemFontOfSize:48 weight:NSFontWeightBold];
+    NSFont *font = [NSFont boldSystemFontOfSize:48];
     
     NSDictionary *attrs = @{
         NSFontAttributeName: font,
