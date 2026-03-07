@@ -3,8 +3,8 @@ import Foundation
 
 class WeatherSaverView: ScreenSaverView {
     
-    private var frameString: String = ""
-    private var frameCount: Int = 0
+    private var frameString: String = "Loading..."
+    private var counter: Int = 0
     
     override init?(frame: NSRect, isPreview: Bool) {
         super.init(frame: frame, isPreview: isPreview)
@@ -17,77 +17,61 @@ class WeatherSaverView: ScreenSaverView {
     }
     
     private func commonInit() {
-        animationTimeInterval = 1.0 / 10.0
-        frameString = generateDemoFrame()
+        animationTimeInterval = 1.0
+        NSLog("WeatherSaver: initialized")
+        frameString = createFrame()
     }
     
-    private func generateDemoFrame() -> String {
-        let lines = [
-            "                                    .",
-            "      .   .   .        .    .        .   .",
-            "   .         .    .         .    .",
-            "        _   _   _   _   _   _   _   _   _",
-            "   .   |   |   |   |   |   |   |   |   |   .",
-            "      _|___|___|___|___|___|___|___|___|___",
-            "     |   |   |   |   |   |   |   |   |   |",
-            "   __|___|___|___|___|___|___|___|___|___|__",
-            "  |                                      |",
-            "  |  ☀  CLEAR SKY    22°C               |",
-            "  |  Wind: 12 km/h                       |",
-            "  |                                      |",
-            "      ^       |        ^        |",
-            "     ^^^      |       ^^^       |",
-            "    _______  _|_     _______   _|_",
-            "   |       ||   |   |       | |   |",
-            "   |___   ||___|   |___   | |___|",
-            "      |___||       |      |___|",
-            "   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-            "   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-            "                                    ,   ,",
-            "                                , ,,, , ,",
-            "                              ,,,,,   ,,,,",
-            "                            ,,,,,,,, ,,,,",
-        ]
-        return lines.joined(separator: "\n")
+    private func createFrame() -> String {
+        counter += 1
+        return """
+            ========================================
+            WEATHER SCREENSAVER
+            Frame: \(counter)
+            Size: \(Int(bounds.width)) x \(Int(bounds.height))
+            ========================================
+            
+                 .   .   .
+            
+              .    CLEAR    .
+            
+                 ~ ~ ~ ~
+            
+            Temperature: 22°C
+            Wind: 12 km/h
+            
+            ========================================
+            """
     }
     
     override func draw(_ rect: NSRect) {
-        NSColor.black.setFill()
-        rect.fill()
+        NSLog("WeatherSaver: draw() called")
         
-        let fontSize = calculateFontSize()
-        guard let font = NSFont(name: "Menlo", size: fontSize) else { return }
+        NSColor.black.setFill()
+        bounds.fill()
+        
+        let font = NSFont(name: "Menlo", size: 12) ?? NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: NSColor.white,
-            .backgroundColor: NSColor.black
+            .foregroundColor: NSColor.white
         ]
         
-        let attributedString = NSAttributedString(string: frameString, attributes: attributes)
+        let string = NSAttributedString(string: frameString, attributes: attributes)
         
-        let textSize = attributedString.size()
-        let textRect = NSRect(
-            x: (bounds.width - textSize.width) / 2,
-            y: (bounds.height - textSize.height) / 2,
-            width: textSize.width,
-            height: textSize.height
-        )
+        let size = string.size()
+        let x = (bounds.width - size.width) / 2
+        let y = (bounds.height - size.height) / 2
         
-        attributedString.draw(in: textRect)
-    }
-    
-    private func calculateFontSize() -> CGFloat {
-        let baseWidth: CGFloat = 80
-        let baseHeight: CGFloat = 24
-        let scaleX = bounds.width / (baseWidth * 8)
-        let scaleY = bounds.height / (baseHeight * 14)
-        let scale = min(scaleX, scaleY)
-        return max(8, min(24, scale * 12))
+        string.draw(at: NSPoint(x: x, y: y))
+        
+        NSLog("WeatherSaver: drew frame at (\(x), \(y)) size (\(size.width), \(size.height))")
     }
     
     override func animateOneFrame() {
-        setNeedsDisplay(bounds)
+        NSLog("WeatherSaver: animateOneFrame() called")
+        frameString = createFrame()
+        needsDisplay = true
     }
     
     override var hasConfigureSheet: Bool {
