@@ -28,14 +28,11 @@ targets:
         PRODUCT_NAME: Weather
         WRAPPER_EXTENSION: saver
         INFOPLIST_FILE: WeatherSaver/Resources/Info.plist
-        SWIFT_OBJC_BRIDGING_HEADER: WeatherSaver/Sources/weathr.h
         CLANG_ENABLE_MODULES: YES
         SWIFT_OBJC_INTERFACE_HEADER_NAME: ""
         COMBINE_HIDPI_IMAGES: YES
         INSTALL_PATH: "$(HOME)/Library/Screen Savers"
         SKIP_INSTALL: NO
-        OTHER_LDFLAGS:
-          - "$(SRCROOT)/../weathr-core/target/release/libweathr.a"
     dependencies:
       - framework: ScreenSaver.framework
         embed: false
