@@ -62,6 +62,7 @@ jobs:
           fi
           # Copy dylib to bundle
           if [ -n "$SAVOR_PATH" ]; then
+            mkdir -p "$SAVOR_PATH/Contents/Frameworks"
             cp ../weathr-core/target/release/libweathr.dylib "$SAVOR_PATH/Contents/Frameworks/"
           fi
           echo "Found: $SAVOR_PATH"
