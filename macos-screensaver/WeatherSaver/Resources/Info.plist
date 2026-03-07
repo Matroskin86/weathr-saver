@@ -24,5 +24,23 @@
     <string>WeatherSaverView</string>
     <key>LSMinimumSystemVersion</key>
     <string>13.0</string>
+    <key>CFPlugInDynamicRegisterFunction</key>
+    <string></string>
+    <key>CFPlugInDynamicRegistration</key>
+    <string>NO</string>
+    <key>CFPlugInFactories</key>
+    <dict>
+        <key>$(PLUGIN_FACTORY_UUID)</key>
+        <string>WeatherSaverView</string>
+    </dict>
+    <key>CFPlugInTypes</key>
+    <dict>
+        <key>8B08C4BF-415B-11D8-B3F9-0003936726F5</key>
+        <array>
+            <string>$(PLUGIN_FACTORY_UUID)</string>
+        </array>
+    </dict>
+    <key>CFPlugInUnloadFunction</key>
+    <string></string>
 </dict>
 </plist>
