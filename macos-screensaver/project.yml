@@ -21,10 +21,6 @@ targets:
         type: group
         excludes:
           - "Frameworks/**"
-      - path: WeatherSaver/Sources/Frameworks
-        type: folder
-        buildPhase: copyFiles
-        destination: frameworks
       - path: WeatherSaver/Resources
         type: group
     settings:
